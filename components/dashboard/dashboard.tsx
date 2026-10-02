@@ -6,6 +6,7 @@ import { runChecks, setPolling, useMonitor } from "@/lib/store";
 import { PageBody, PageHeader } from "../shell/page-header";
 import { Button, cx, Panel, PanelHeader, Select } from "../ui/primitives";
 import { AddEndpointForm } from "./add-endpoint-form";
+import { DemoNotice } from "./demo-notice";
 import { EndpointDetail } from "./endpoint-detail";
 import { EndpointTable } from "./endpoint-table";
 import { KpiRow } from "./kpi-row";
@@ -72,6 +73,8 @@ export function Dashboard() {
           </>
         }
       />
+
+      <DemoNotice />
 
       {lastError && (
         <div role="alert" className="rounded-lg border border-fail/30 bg-fail-soft px-4 py-3 text-sm text-fail-ink">

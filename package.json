@@ -1,6 +1,6 @@
 {
-  "name": "api-monitor",
-  "version": "0.1.0",
+  "name": "puls",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -27,5 +27,9 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.0.3"
+  },
+  "description": "API- & Webhook-Monitor: Live-Status, Latenz, Vorfälle und Alarme. Eine Demo von BKS Technologies.",
+  "engines": {
+    "node": ">=20.9"
   }
 }

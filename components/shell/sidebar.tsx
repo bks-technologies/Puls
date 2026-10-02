@@ -4,6 +4,7 @@ import { Activity, BellRing, LayoutDashboard, Menu, RotateCcw, Send, TriangleAle
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { company } from "@/lib/legal";
 import { resetDemo, useMonitor } from "@/lib/store";
 import { fmtRelative } from "@/lib/format";
 import { useNow } from "@/lib/use-now";
@@ -117,6 +118,24 @@ function ResetButton() {
   );
 }
 
+function Credits() {
+  return (
+    <div className="flex flex-col gap-1.5 border-t border-rail-line px-2 pt-3 text-[11px] text-rail-muted">
+      <a href={company.url} className="hover:text-rail-ink">
+        Eine Demo von <span className="font-medium text-rail-ink">{company.name}</span>
+      </a>
+      <div className="flex gap-3">
+        <Link href="/impressum" className="hover:text-rail-ink">
+          Impressum
+        </Link>
+        <Link href="/datenschutz" className="hover:text-rail-ink">
+          Datenschutz
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export function Sidebar() {
   const [open, setOpen] = useState(false);
 
@@ -130,6 +149,7 @@ export function Sidebar() {
           <div className="mt-auto flex flex-col gap-2">
             <MonitorStatus />
             <ResetButton />
+            <Credits />
           </div>
         </aside>
       </div>
@@ -157,6 +177,7 @@ export function Sidebar() {
           <div className="mt-4 flex flex-col gap-2">
             <MonitorStatus />
             <ResetButton />
+            <Credits />
           </div>
         </div>
       )}
