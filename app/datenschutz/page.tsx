@@ -62,8 +62,8 @@ export default function Page() {
 
       <h2>7. Hosting und Schutz vor Missbrauch</h2>
       <p>
-        Die Anwendung läuft bei Vercel Inc. in der Region Frankfurt am Main; mit Vercel besteht ein
-        Auftragsverarbeitungsvertrag nach Art. 28 DSGVO. Beim Aufruf verarbeitet Vercel technisch notwendige
+        Die Anwendung läuft bei Vercel Inc. in der Region Frankfurt am Main. Vercel Inc. hat seinen Sitz in den USA; dabei können Verbindungsdaten auch in die USA übertragen werden.
+        Beim Aufruf verarbeitet Vercel technisch notwendige
         Verbindungsdaten (IP-Adresse, Zeitpunkt, aufgerufene Adresse) zur Auslieferung und Absicherung. Um Missbrauch zu
         verhindern, zählt unser Server Anfragen je IP-Adresse; dieser Zähler liegt nur im Arbeitsspeicher und verfällt
         nach einer Minute. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.
