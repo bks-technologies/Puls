@@ -8,6 +8,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://puls.bkstechnologies.de"),
   title: { default: "Puls · API- & Webhook-Monitor", template: "%s · Puls" },
   description:
     "Überwacht APIs und Webhooks in Echtzeit: Status, Latenz, Vorfälle und Benachrichtigungen. Eine Demo von BKS Technologies.",
