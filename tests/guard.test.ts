@@ -19,6 +19,14 @@ describe("isBlockedAddress", () => {
     "fe80::1",
     "::ffff:127.0.0.1",
     "::ffff:10.0.0.1",
+    "::ffff:7f00:1",
+    "::ffff:a9fe:a9fe",
+    "0:0:0:0:0:ffff:7f00:1",
+    "::127.0.0.1",
+    "::ffff:0:7f00:1",
+    "64:ff9b::7f00:1",
+    "2002:7f00:1::",
+    "fe80::1%eth0",
   ])("blocks %s", (ip) => expect(isBlockedAddress(ip)).toBe(true));
 
   it.each(["8.8.8.8", "140.82.121.6", "172.32.0.1", "2606:4700:4700::1111"])("allows %s", (ip) =>
@@ -36,6 +44,12 @@ describe("resolveTarget", () => {
   it("rejects other relative paths", async () => {
     expect((await resolveTarget("/api/check", ORIGIN)).ok).toBe(false);
     expect((await resolveTarget("/api/alerts/slack", ORIGIN)).ok).toBe(false);
+  });
+
+  it("rejects IPv4-mapped IPv6 literals in every notation", async () => {
+    for (const u of ["http://[::ffff:127.0.0.1]", "http://[::ffff:7f00:1]/", "http://[::ffff:169.254.169.254]/latest"]) {
+      expect((await resolveTarget(u, ORIGIN)).ok).toBe(false);
+    }
   });
 
   it.each([

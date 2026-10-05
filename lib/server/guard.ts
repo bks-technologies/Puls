@@ -38,16 +38,35 @@ function isBlockedV4(ip: string) {
   });
 }
 
+/** Expands any valid IPv6 notation ("::", embedded IPv4, hex) into eight 16-bit groups. */
+function expandV6(ip: string): number[] | null {
+  let s = ip.toLowerCase().split("%")[0];
+  const v4 = s.match(/(\d+\.\d+\.\d+\.\d+)$/);
+  if (v4) {
+    const n = ipv4ToInt(v4[1]);
+    s = s.slice(0, -v4[1].length) + `${(n >>> 16).toString(16)}:${(n & 0xffff).toString(16)}`;
+  }
+  const halves = s.split("::");
+  if (halves.length > 2) return null;
+  const head = halves[0] ? halves[0].split(":") : [];
+  const tail = halves.length === 2 && halves[1] ? halves[1].split(":") : [];
+  const missing = 8 - head.length - tail.length;
+  if (halves.length === 1 ? missing !== 0 : missing < 1) return null;
+  const groups = [...head, ...Array(halves.length === 2 ? missing : 0).fill("0"), ...tail].map((g) => parseInt(g, 16));
+  return groups.length === 8 && groups.every((g) => g >= 0 && g <= 0xffff) ? groups : null;
+}
+
 function isBlockedV6(ip: string) {
-  const lower = ip.toLowerCase();
-  const mapped = lower.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
-  if (mapped) return isBlockedV4(mapped[1]);
-  if (lower === "::" || lower === "::1") return true;
-  const first = parseInt(lower.split(":")[0] || "0", 16);
-  if ((first & 0xfe00) === 0xfc00) return true; // fc00::/7 unique local
-  if ((first & 0xffc0) === 0xfe80) return true; // fe80::/10 link local
-  if ((first & 0xff00) === 0xff00) return true; // multicast
-  if (lower.startsWith("64:ff9b:") || lower.startsWith("2001:db8:")) return true;
+  const g = expandV6(ip);
+  if (!g) return true;
+  // ::/64 enthält nichts Öffentliches: ::, ::1, IPv4-kompatibel, IPv4-gemappt (::ffff:a.b.c.d, auch als ::ffff:7f00:1).
+  if (g[0] === 0 && g[1] === 0 && g[2] === 0 && g[3] === 0) return true;
+  if (g[0] === 0x64 && g[1] === 0xff9b) return true; // NAT64, führt auf IPv4 zurück
+  if (g[0] === 0x2001 && g[1] === 0x0db8) return true; // Dokumentation
+  if (g[0] === 0x2002) return true; // 6to4, enthält eine IPv4-Adresse
+  if ((g[0] & 0xfe00) === 0xfc00) return true; // fc00::/7 unique local
+  if ((g[0] & 0xffc0) === 0xfe80) return true; // fe80::/10 link local
+  if ((g[0] & 0xff00) === 0xff00) return true; // multicast
   return false;
 }
 
